@@ -20,12 +20,10 @@ export const join = async (req, res, next) => {
     else {
         try {
             const user = await User({ email })
-            console.log(user)
             const userRegister = await User.register(user, password)
             return res.sendStatus(200)
         }
         catch (error) {
-            console.log(error)
             return res.sendStatus(400)
         }
     }

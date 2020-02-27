@@ -18,14 +18,20 @@ const cookieStore = MongoStore(session)
 dotenv.config()
 
 app.use(helmet())
-app.use(cors())
-app.use(cookieParser());
+app.use(cors({
+    origin: true,
+    credentials: true,
+}))
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'))
 app.use(session({
     secret: process.env.COOKIE_SECRET,
-    resave: true, saveUninitialized: false,
+    resave: true,
+    saveUninitialized: false,
+    cookie: { httpOnly: true, secure: false },
+    name: 'glidelinss',
     store: new cookieStore({ mongooseConnection: Mongoose.connection })
 }))
 app.use(passport.initialize())
